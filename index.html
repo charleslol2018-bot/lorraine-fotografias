@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lorraine Fotografias</title>
+
+  <!-- Fontes do Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+
+  <!-- CSS externo — aponta para a pasta css/ -->
+  <link rel="stylesheet" href="css/3.css"/>
+  <link rel="shortcut icon" href="img/five.png" type="image/x-icon">
+</head>
+<body>
+
+  <!-- ===== CABEÇALHO ===== -->
+  <header id="inicio">
+    <picture>
+  <source srcset="img/Lorrafotras480.png" media="(max-width: 480px)"/>
+  <img
+    src="img/Lorrafotras800.png"
+    alt="Lorraine Fotografias"
+    class="logo-img"
+    width="320"
+    height="120"
+    />
+  </picture>
+    <p class="slogan"><span>Onde</span> <span>o</span> <span>detalhe</span> <span>ganha</span> <span>o</span> <span>protagonismo.</span></p>
+    <nav>
+      <a href="#inicio">Início</a>
+      <a href="https://www.instagram.com/lorraine.fotografias/" target="_blank">Contato</a>
+      <a href="#galeria">Fotos</a>
+    </nav>
+  </header>
+
+  <!-- ===== CAROUSEL ===== -->
+  <section class="section-carousel">
+    <h2>Um momento eterno</h2>
+    <div class="carousel-wrapper">
+      <button class="carousel-btn prev" aria-label="Anterior">&#8249;</button>
+      <div class="carousel-track" id="carouselTrack">
+        <!--
+          SUBSTITUA os src abaixo pelas suas fotos reais.
+          Exemplo: src="fotos/foto1.jpg"
+        -->
+        <img src="img/ObraPrima800.jpg" alt="chachorro Ravena"/>
+        <img src="img/projeto(1)800.jpg" alt="Passaro na água"/>
+        <img src="img/projeto(2)800.jpg" alt="Libélula"/>
+        <img src="img/projeto(3)800.jpg" alt="Paisagem"/>
+        <img src="img/par800.jpg" alt="Par de passaro"/>
+        <img src="img/Opescador.jpg" alt="O pescador"/>
+      </div>
+      <button class="carousel-btn next" aria-label="Próximo">&#8250;</button>
+    </div>
+    <div class="carousel-dots" id="carouselDots"></div>
+  </section>
+
+  <!-- ===== FOTÓGRAFA ===== -->
+  <section class="section-about" id="sobre">
+    <div class="about-inner">
+      <!--
+        SUBSTITUA o src abaixo pela sua foto.
+        Exemplo: src="fotos/lorraine.jpg"
+      -->
+      <img
+        class="about-photo"
+        src="img/lorraportIMG.jpg"
+        alt="Lorraine fotógrafa"
+      />
+      <div class="about-text">
+        <h2>Potencial aplicado</h2>
+        <p>
+          Meu estilo fotográfico é pautado pela naturalidade e pela força da espontaneidade. Acredito que a fotografia vai além do clique, é sobre criar um ambiente leve, onde cada pessoa se sinta confortável para revelar sua verdadeira essência. Para mim, cada ensaio é um projeto único, planejado meticulosamente para refletir a identidade de quem está diante das lentes.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALERIA ESPIRAL 3D ===== -->
+  <section class="section-gallery" id="galeria">
+    <h2>Galeria</h2>
+
+    <div class="spiral-box" id="spiralBox">
+      <div class="spiral-viewport">
+        <div class="spiral-container" id="spiralMola"></div>
+      </div>
+      <div class="spiral-info">
+        <h3 id="spiral-titulo"></h3>
+        <p id="spiral-descricao"></p>
+        <a id="spiral-link" href="#" target="_blank" class="spiral-ver-btn">Ver no Instagram ↗</a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== SCRIPT GALERIA ESPIRAL ===== -->
+  <script>
+  (function() {
+    const FOTOS = [
+      {
+        t: 'Libélula em repouso',
+        d: 'Capturada ao amanhecer, quando a luz toca as asas transparentes.',
+        src: 'img/projeto(2)800.jpg',
+        link: 'https://www.instagram.com/p/DBmFIedRLuR/?img_index=1'
+      },
+      {
+        t: 'Olhar felino',
+        d: 'Captura de olhares felinos — um para natureza, outro para mim.',
+        src: 'img/projeto(3)800.jpg',
+        link: 'https://www.instagram.com/p/DMA33H9sn4p/?img_index=4'
+      },
+      {
+        t: 'A velocidade animal',
+        d: 'Momento de adrenalina animal.',
+        src: 'img/ObraPrima800.jpg',
+        link: 'https://www.instagram.com/p/DQK0EJtgf-9/'
+      },
+      {
+        t: 'Banhar do Pássaro',
+        d: 'Um lindo pássaro se banhando.',
+        src: 'img/projeto(1)800.jpg',
+        link: 'https://www.instagram.com/p/C7uwhAKPcZW/'
+      },
+      {
+        t: 'O amor animal',
+        d: 'A beleza do amor — um junto ao outro.',
+        src: 'img/par800.jpg',
+        link: 'https://www.instagram.com/p/DGqe7O3xnTM/?img_index=3'
+      },
+      {
+        t: 'O pescador',
+        d: 'Um pescador e seu barco — em águas limpas.',
+        src: 'img/Opescador.jpg',
+        link: 'https://www.instagram.com/p/DBmEeYFR1q3/?img_index=3'
+      }
+    ];
+
+    const container = document.getElementById('spiralMola');
+    const tituloEl  = document.getElementById('spiral-titulo');
+    const descEl    = document.getElementById('spiral-descricao');
+    const linkEl    = document.getElementById('spiral-link');
+
+    let currentIndex = 0;
+    let isMoving = false;
+
+    function getMolaParams() {
+      const isMobile = window.innerWidth < 768;
+      return {
+        raio:  isMobile ? 220 : 550,
+        passo: isMobile ? 180 : 280,
+        angulo: 360 / FOTOS.length
+      };
+    }
+
+    FOTOS.forEach((f, i) => {
+      const card = document.createElement('div');
+      card.className = 'spiral-card';
+      card.innerHTML = `<img src="${f.src}" alt="${f.t}" loading="lazy">`;
+      card.addEventListener('click', () => {
+        if (currentIndex !== i) { currentIndex = i; update(); }
+        else { window.open(f.link, '_blank'); }
+      });
+      container.appendChild(card);
+    });
+
+    const cards = container.querySelectorAll('.spiral-card');
+
+    function update() {
+      const { raio, passo, angulo } = getMolaParams();
+      cards.forEach((card, i) => {
+        const relIndex = i - currentIndex;
+        const rotateY  = relIndex * angulo;
+        const translateY = relIndex * -passo;
+        card.style.transform = `rotateY(${rotateY}deg) translateZ(${raio}px) translateY(${translateY}px)`;
+        const dist = Math.abs(relIndex);
+        if (dist === 0) {
+          card.style.opacity = '1';
+          card.style.zIndex  = '100';
+          card.classList.add('active');
+          tituloEl.textContent = FOTOS[i].t;
+          descEl.textContent   = FOTOS[i].d;
+          linkEl.href          = FOTOS[i].link;
+        } else if (dist === 1) {
+          card.style.opacity = '0.5';
+          card.style.zIndex  = '10';
+          card.classList.remove('active');
+        } else {
+          card.style.opacity = '0.15';
+          card.style.zIndex  = String(5 - dist);
+          card.classList.remove('active');
+        }
+      });
+    }
+
+    function move(dir) {
+      if (isMoving) return;
+      const next = currentIndex + dir;
+      if (next >= 0 && next < FOTOS.length) {
+        isMoving = true;
+        currentIndex = next;
+        update();
+        setTimeout(() => isMoving = false, 800);
+      }
+    }
+
+    // Scroll APENAS dentro da spiral-box (75% central)
+    const spiralBox = document.getElementById('spiralBox');
+    spiralBox.addEventListener('wheel', e => {
+      e.preventDefault();
+      move(e.deltaY > 0 ? 1 : -1);
+    }, { passive: false });
+
+    let touchY = 0;
+    spiralBox.addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive: true });
+    spiralBox.addEventListener('touchend', e => {
+      const dy = touchY - e.changedTouches[0].clientY;
+      if (Math.abs(dy) > 40) move(dy > 0 ? 1 : -1);
+    }, { passive: true });
+
+    window.addEventListener('resize', () => update());
+    update();
+  })();
+  </script>
+
+  <!-- ===== SEÇÃO CONTATO ===== -->
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('n9DLATiUOhG_gYD7C');</script>
+
+  <section class="section-contact" id="contato">
+    <h2>Mande sua mensagem</h2>
+    <p class="contact-sub">Preencha abaixo e envie diretamente — sem cadastro.</p>
+
+    <div class="contact-form">
+      <input type="email" id="contact-email" class="contact-input" placeholder="Seu e-mail (para eu responder)" />
+      <textarea id="contact-msg" class="contact-textarea" placeholder="Escreva sua mensagem aqui..." rows="5"></textarea>
+      <button class="contact-btn" id="contact-btn-send" onclick="enviarEmail()">Enviar mensagem ✉</button>
+      <p id="contact-feedback" class="contact-feedback"></p>
+    </div>
+  </section>
+
+  <script>
+  function enviarEmail() {
+    const email    = document.getElementById('contact-email').value.trim();
+    const mensagem = document.getElementById('contact-msg').value.trim();
+    const btn      = document.getElementById('contact-btn-send');
+    const feedback = document.getElementById('contact-feedback');
+
+    if (!email) {
+      feedback.textContent = '⚠️ Por favor, informe seu e-mail.';
+      feedback.style.color = '#f0a050';
+      return;
+    }
+    if (!mensagem) {
+      feedback.textContent = '⚠️ Por favor, escreva uma mensagem.';
+      feedback.style.color = '#f0a050';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    feedback.textContent = '';
+
+    emailjs.send('service_80ky46i', 'template_25wrwms', {
+      name:    email,
+      email:   email,
+      title:   'Mensagem via site',
+      message: mensagem,
+      time:    new Date().toLocaleString('pt-BR')
+    })
+    .then(() => {
+      feedback.textContent = '✅ Mensagem enviada com sucesso!';
+      feedback.style.color = '#7dcea0';
+      document.getElementById('contact-email').value = '';
+      document.getElementById('contact-msg').value   = '';
+      btn.textContent = 'Enviar mensagem ✉';
+      btn.disabled = false;
+    })
+    .catch((err) => {
+      feedback.textContent = '❌ Erro ao enviar. Tente novamente.';
+      feedback.style.color = '#e07070';
+      btn.textContent = 'Enviar mensagem ✉';
+      btn.disabled = false;
+    });
+  }
+  </script>
+
+  <!-- ===== RODAPÉ ===== -->
+  <footer>
+
+    <!-- Linha 1: copyright + redes sociais em linha -->
+    <div class="footer-row">
+      <p class="footer-copy">© 2025 <strong>Lorraine Fotografias</strong> — Onde o detalhe ganha o protagonismo.</p>
+      <div class="footer-links">
+        <a href="https://www.instagram.com/lorraine.fotografias/" target="_blank" class="footer-instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+          </svg>Instagram
+        </a>
+        <a href="https://chat.whatsapp.com/LuHdECvhFu51BR7GqEkTsy?mode=gi_t" target="_blank" class="footer-instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+          </svg>WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <!-- Linha 2: crédito do dev -->
+    <div class="footer-dev">
+      <p>Site criado por: <strong>Charles Aparecido Luiz</strong></p>
+      <a href="https://www.linkedin.com/in/charles-aparecido-luiz-ba7a803a0/" target="_blank" class="footer-instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+          <rect x="2" y="9" width="4" height="12"/>
+          <circle cx="4" cy="4" r="2"/>
+        </svg>LinkedIn
+      </a>
+    </div>
+
+  </footer>
+
+  <!-- ===== JAVASCRIPT DO CAROUSEL ===== -->
+  <script>
+  (function () {
+    const track         = document.getElementById('carouselTrack');
+    const dotsContainer = document.getElementById('carouselDots');
+    const btnPrev       = document.querySelector('.carousel-btn.prev');
+    const btnNext       = document.querySelector('.carousel-btn.next');
+    const originais     = Array.from(track.querySelectorAll('img'));
+    const total         = originais.length;
+    let current         = total; // começa no primeiro clone
+    let autoTimer;
+    let animando        = false;
+
+    function visibleCount() {
+      return window.innerWidth <= 640 ? 1 : 3;
+    }
+
+    // Clona fotos no início e no fim para criar ilusão de loop
+    originais.forEach(img => {
+      track.appendChild(img.cloneNode(true));  // clones no fim
+    });
+    originais.forEach(img => {
+      track.insertBefore(img.cloneNode(true), track.firstChild); // clones no início
+    });
+
+    const todasImagens = track.querySelectorAll('img');
+
+    // Cria dots (só para as originais)
+    for (let i = 0; i < total; i++) {
+      const dot = document.createElement('span');
+      dot.addEventListener('click', () => goTo(i + total));
+      dotsContainer.appendChild(dot);
+    }
+
+    function updateDots() {
+      const index = ((current - total) % total + total) % total;
+      dotsContainer.querySelectorAll('span').forEach((d, i) => {
+        d.classList.toggle('active', i === index);
+      });
+    }
+
+    function getItemWidth() {
+      return todasImagens[0].offsetWidth + 16;
+    }
+
+    function goTo(index, comAnimacao = true) {
+      if (animando) return;
+      current = index;
+      const offset = current * getItemWidth();
+      if (comAnimacao) {
+        animando = true;
+        track.style.transition = 'transform 0.7s cubic-bezier(0.4,0,0.2,1)';
+      } else {
+        track.style.transition = 'none';
+      }
+      track.style.transform = `translateX(-${offset}px)`;
+      updateDots();
+    }
+
+    // Quando animação termina, verifica se precisa "teletransportar"
+    track.addEventListener('transitionend', () => {
+      animando = false;
+      if (current >= total * 2) {
+        goTo(total, false);
+      } else if (current < total) {
+        goTo(total * 2 - visibleCount(), false);
+      }
+    });
+
+    function next() {
+      goTo(current + 1);
+    }
+
+    function prev() {
+      goTo(current - 1);
+    }
+
+    btnNext.addEventListener('click', () => { next(); resetAuto(); });
+    btnPrev.addEventListener('click', () => { prev(); resetAuto(); });
+
+    function startAuto()  { autoTimer = setInterval(next, 1500); }
+    function resetAuto()  { clearInterval(autoTimer); startAuto(); }
+
+    goTo(current, false);
+    startAuto();
+
+    window.addEventListener('resize', () => goTo(current, false));
+  })();
+</script>
+
+  <script>
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const destino = document.querySelector(this.getAttribute('href'));
+      if (!destino) return;
+      const topo = destino.getBoundingClientRect().top + window.scrollY;
+      const inicio = window.scrollY;
+      const distancia = topo - inicio;
+      const duracao = 100; // milissegundos — aumenta para mais lento
+      let startTime = null;
+
+      function animar(tempo) {
+        if (!startTime) startTime = tempo;
+        const progresso = Math.min((tempo - startTime) / duracao, 1);
+        const ease = progresso < 0.5
+          ? 2 * progresso * progresso
+          : -1 + (4 - 2 * progresso) * progresso;
+        window.scrollTo(0, inicio + distancia * ease);
+        if (progresso < 1) requestAnimationFrame(animar);
+      }
+
+      requestAnimationFrame(animar);
+    });
+  });
+</script>
+
+<script>
+// ── BRILHO NO TOQUE (mobile) ──
+// Simula o hover do PC: toca na palavra → brilha → apaga
+(function() {
+  function adicionarBrilhoToque(seletores, classeGlow) {
+    document.querySelectorAll(seletores).forEach(el => {
+      el.addEventListener('touchstart', function(e) {
+        this.classList.add(classeGlow);
+      }, { passive: true });
+      el.addEventListener('touchend', function() {
+        const self = this;
+        setTimeout(() => self.classList.remove(classeGlow), 600);
+      }, { passive: true });
+    });
+  }
+
+  // Palavras do slogan
+  adicionarBrilhoToque('.slogan span', 'glow-palavra');
+
+  // Títulos h2 inteiros
+  adicionarBrilhoToque(
+    '.section-carousel h2, .section-about h2, .section-gallery h2',
+    'glow-titulo'
+  );
+})();
+</script>
+
+</body>
+</html>
